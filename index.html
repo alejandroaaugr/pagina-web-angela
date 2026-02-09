@@ -1911,12 +1911,19 @@ function playCurrentSong() {
 
   // 1. Esta función debe estar definida antes de cargar la API
   function onYouTubeIframeAPIReady() {
-    ytPlayer = new YT.Player('youtube-video', {
-      events: {
-        'onStateChange': onPlayerStateChange
-      }
-    });
-  }
+  // Video 1
+  new YT.Player('youtube-video', {
+    events: { 'onStateChange': onPlayerStateChange }
+  });
+  // Video 2 (F53-wod52JI)
+  new YT.Player('youtube-video-2', {
+    events: { 'onStateChange': onPlayerStateChange }
+  });
+  // Video 3 (nDzf7VGEztY)
+  new YT.Player('youtube-video-3', {
+    events: { 'onStateChange': onPlayerStateChange }
+  });
+}
 
   // 2. Controlar el estado del video
   function onPlayerStateChange(event) {
