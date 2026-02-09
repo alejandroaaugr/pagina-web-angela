@@ -955,10 +955,16 @@
   <source src="https://github.com/alejandroaaugr/pagina-web-angela/raw/refs/heads/main/media/video8.mp4" type="video/mp4">
   Tu navegador no soporta la reproducción de video.
 </video>
-<video width="640" height="360" controls>
-  <source src="https://github.com/alejandroaaugr/pagina-web-angela/raw/refs/heads/main/video9.mp4" type="video/mp4">
-  Tu navegador no soporta la reproducción de video.
-</video>
+<iframe 
+  id="youtube-video-4"
+  width="315" 
+  height="560" 
+  src="https://www.youtube.com/embed/a0Q6V3jQidI?enablejsapi=1" 
+  title="Recuerdos Angela" 
+  frameborder="0" 
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+  allowfullscreen>
+</iframe>
 <video width="640" height="360" controls>
   <source src="https://github.com/alejandroaaugr/pagina-web-angela/raw/refs/heads/main/43704635-cc32-41eb-8efe-bfd7e9a4027d.MP4" type="video/mp4">
   Tu navegador no soporta la reproducción de video.
@@ -1921,6 +1927,9 @@ function playCurrentSong() {
   });
   // Video 3 (nDzf7VGEztY)
   new YT.Player('youtube-video-3', {
+    events: { 'onStateChange': onPlayerStateChange }
+  });
+  new YT.Player('youtube-video-4', {
     events: { 'onStateChange': onPlayerStateChange }
   });
 }
