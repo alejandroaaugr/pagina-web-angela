@@ -1714,7 +1714,6 @@
   </div>
 
   <audio id="background-music" src="" autoplay></audio>
-  <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     const images=[
       "d123.jpg",
@@ -1765,31 +1764,6 @@ function changeImage(direction) {
     let currentSongIndex = 0; // Índice de la canción actual
     const backgroundMusic = document.getElementById('background-music'); // Referencia al audio
       // Función para reproducir la canción actual
-  let ytPlayer; // Variable para el video de YouTube
-
-// Esta función se ejecuta automáticamente cuando la API de YouTube está lista
-function onYouTubeIframeAPIReady() {
-  ytPlayer = new YT.Player('youtube-video', {
-    events: {
-      'onStateChange': onPlayerStateChange
-    }
-  });
-}
-
-// Controla si el video de YouTube se reproduce, se pausa o termina
-function onPlayerStateChange(event) {
-  const backgroundMusic = document.getElementById('background-music');
-  
-  if (event.data == YT.PlayerState.PLAYING) {
-    // Si el video de YouTube empieza, pausamos la música
-    backgroundMusic.pause();
-    console.log("YouTube reproduciendo: Música pausada.");
-  } else if (event.data == YT.PlayerState.PAUSED || event.data == YT.PlayerState.ENDED) {
-    // Si el video se pausa o termina, reanudamos la música
-    backgroundMusic.play().catch(error => console.log("Esperando interacción para sonar..."));
-    console.log("YouTube detenido: Música reanudada.");
-  }
-}
 
 // CORRECCIÓN EN TU FUNCIÓN EXISTENTE:
 function playCurrentSong() {
@@ -1920,6 +1894,40 @@ function playCurrentSong() {
     }
   </script>
   
+  <script>
+  let ytPlayer;
+
+  // 1. Esta función debe estar definida antes de cargar la API
+  function onYouTubeIframeAPIReady() {
+    ytPlayer = new YT.Player('youtube-video', {
+      events: {
+        'onStateChange': onPlayerStateChange
+      }
+    });
+  }
+
+  // 2. Controlar el estado del video
+  function onPlayerStateChange(event) {
+    const backgroundMusic = document.getElementById('background-music');
+    
+    // Si el video de YouTube se está reproduciendo (Estado 1)
+    if (event.data == YT.PlayerState.PLAYING) {
+      backgroundMusic.pause();
+      console.log("Música pausada por YouTube");
+    } 
+    // Si el video se pausa (2) o termina (0)
+    else if (event.data == YT.PlayerState.PAUSED || event.data == YT.PlayerState.ENDED) {
+      backgroundMusic.play().catch(e => console.log("Esperando interacción..."));
+      console.log("Música reanudada");
+    }
+  }
+
+  // 3. Cargar la API de YouTube de forma dinámica para asegurar que funcione
+  var tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+</script>
   
 </body>
 
