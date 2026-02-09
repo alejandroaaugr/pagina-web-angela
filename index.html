@@ -909,9 +909,10 @@
         Tu navegador no soporta la reproducción de video.
     </video>
     <iframe 
+  id="youtube-video"
   width="315" 
   height="560" 
-  src="https://www.youtube.com/embed/bQrkL5cYxGU" 
+  src="https://www.youtube.com/embed/bQrkL5cYxGU?enablejsapi=1" 
   title="Video Angela" 
   frameborder="0" 
   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
@@ -1713,7 +1714,7 @@
   </div>
 
   <audio id="background-music" src="" autoplay></audio>
-  
+  <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     const images=[
       "d123.jpg",
@@ -1764,16 +1765,43 @@ function changeImage(direction) {
     let currentSongIndex = 0; // Índice de la canción actual
     const backgroundMusic = document.getElementById('background-music'); // Referencia al audio
       // Función para reproducir la canción actual
-  function playCurrentSong() {
-    if (currentSongIndex < playlist.length) {
-      backgroundMusic.src = playlist[currentSongIndex];
-      bac.play()
-        .then(() => console.log("Reproduciendo:", playlist[currentSongIndex]))
-        .catch(error => console.error("Error al reproducir:", error));
-    } else {
-      console.log("Playlist terminada.");
+  let ytPlayer; // Variable para el video de YouTube
+
+// Esta función se ejecuta automáticamente cuando la API de YouTube está lista
+function onYouTubeIframeAPIReady() {
+  ytPlayer = new YT.Player('youtube-video', {
+    events: {
+      'onStateChange': onPlayerStateChange
     }
+  });
+}
+
+// Controla si el video de YouTube se reproduce, se pausa o termina
+function onPlayerStateChange(event) {
+  const backgroundMusic = document.getElementById('background-music');
+  
+  if (event.data == YT.PlayerState.PLAYING) {
+    // Si el video de YouTube empieza, pausamos la música
+    backgroundMusic.pause();
+    console.log("YouTube reproduciendo: Música pausada.");
+  } else if (event.data == YT.PlayerState.PAUSED || event.data == YT.PlayerState.ENDED) {
+    // Si el video se pausa o termina, reanudamos la música
+    backgroundMusic.play().catch(error => console.log("Esperando interacción para sonar..."));
+    console.log("YouTube detenido: Música reanudada.");
   }
+}
+
+// CORRECCIÓN EN TU FUNCIÓN EXISTENTE:
+function playCurrentSong() {
+  const backgroundMusic = document.getElementById('background-music');
+  if (currentSongIndex < playlist.length) {
+    backgroundMusic.src = playlist[currentSongIndex];
+    // Cambié "bac.play()" por "backgroundMusic.play()" que era el error
+    backgroundMusic.play()
+      .then(() => console.log("Reproduciendo:", playlist[currentSongIndex]))
+      .catch(error => console.error("Error al reproducir:", error));
+  }
+}
     // Función para alternar la visibilidad de un año o mes
   function toggleVisibility(id) {
     const element = document.getElementById(id);
